@@ -42,7 +42,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION }}
-          release_name: "Release ${{ env.VERSION }}"
+          name: "Release ${{ env.VERSION }}"
           body: "This is an automatically incremented release."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
