@@ -52,6 +52,7 @@ jobs:
       - name: Upload file as release asset
         uses: softprops/action-gh-release@v1
         with:
-          assets: generated/combined.js
+          files: generated/combined.js
+          tag_name: ${{ env.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
