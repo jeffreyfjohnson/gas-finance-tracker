@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  run-python-script:
+  combine-files:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,3 +28,28 @@ jobs:
       - name: Run Python script
         run: |
           python3 generated/filecombiner.py  # Update with the relative path to your Python script
+
+      - name: Get commit count for versioning
+        id: get_version
+        run: |
+          # Get the number of commits and use it as the version
+          VERSION="v1.$(git rev-list --count HEAD)"
+          echo "Version is $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+        
+      - name: Create a GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: "Release ${{ env.VERSION }}"
+          body: "This is an automatically incremented release."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload file as release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          assets: generated/combined.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
