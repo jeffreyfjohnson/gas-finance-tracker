@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:apps='http://schemas.google.com/apps/2006'>
+	<title>Mail Filters</title>
+	<id>tag:mail.google.com,2008:filters:z0000001726891026991*0299456898650896037,z0000001726961822274*5016090375811713082,z0000001727446748167*2339651999766885761,z0000001728002654244*4760510478206645786,z0000001730675980836*3236371093830686133,z0000001735953488303*2442402309337115203</id>
+	<updated>2025-04-28T01:58:32Z</updated>
+	<author>
+		<name>Jeff J</name>
+		<email>jeffreyfjohnson92@gmail.com</email>
+	</author>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001726891026991*0299456898650896037</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='from' value='no.reply.alerts@chase.com'/>
+		<apps:property name='subject' value='transaction'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001726961822274*5016090375811713082</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='from' value='venmo@venmo.com'/>
+		<apps:property name='subject' value='paid'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001727446748167*2339651999766885761</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='subject' value='alert'/>
+		<apps:property name='hasTheWord' value='no-reply@mail.safe.bcu.org'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001728002654244*4760510478206645786</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='from' value='capitalone@notification.capitalone.com'/>
+		<apps:property name='subject' value='transaction OR reward'/>
+		<apps:property name='hasTheWord' value='AND'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001730675980836*3236371093830686133</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='from' value='usbank@notifications.usbank.com'/>
+		<apps:property name='subject' value='transaction'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001735953488303*2442402309337115203</id>
+		<updated>2025-04-28T01:58:32Z</updated>
+		<content></content>
+		<apps:property name='from' value='onlinebanking@ealerts.bankofamerica.com'/>
+		<apps:property name='subject' value='transaction'/>
+		<apps:property name='label' value='financial-transactions'/>
+		<apps:property name='shouldMarkAsRead' value='true'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+</feed>
