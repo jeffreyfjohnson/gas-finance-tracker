@@ -1,5 +1,7 @@
 # gas-finance-tracker
 
+[![License: CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/)
+
 [Jump to simple setup](#simpler-setup)
 
 ## Why it's useful
@@ -57,6 +59,7 @@ If there are other institutions you want to see supported, follow the patterns i
 - Add more categories to the `overview` sheet of the spreadsheet. These will propogate a few places throughout the spreadsheet
 - Speaking of categories, in the `categories` sheet, you can define default categories if the transaction description contains a certain string
   - for instance if you mapped `safeway` to the `Groceries` category, and a transaction came in with description `SAFEWAYGROCERY #4321`, that transaction will automatically be categorized as `Groceries`
+- Using a similar process you used to schedule the main part of the script, you can have it email you every day/week/whatever if there are expenses missing categories, or income missing a description. Just go through the same process as above, but select the `remind` function instead of `getTransactionsForDay`
 - In the `rules` sheet, you can get more advanced with your customization. For any of the first 3 columns aka the "if" columns, you can put what strings need to be present in the email, description or extra data, in order for the following modifications to apply
   - if any of the first 3 columns are empty, they are ignored for that rule
   - email is self explanatory, use one of the following:
