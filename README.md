@@ -1,5 +1,7 @@
 # gas-finance-tracker
 
+[Jump to simple setup](#simpler-setup)
+
 ## Why it's useful
 - It takes care of the tedious aspects of tracking your spending, but allows complete flexibility in how you visualize and process your data
 - You don't have to entrust your financial institution passwords to a third party. Everything is processed within the Google ecosystem. There is no extra risk introduced to automatically track your transactions.
@@ -24,7 +26,56 @@
 - Venmo
 If there are other institutions you want to see supported, follow the patterns in the `parsers` directory, and submit a PR!
 
-## Setup (Simpler)
-1. This is the most tedious. You have to go into your account for all the financial instituions you care about (eg, your credit card, your bank, your peer to peer payments account), go to your account settings, and turn on email notifications. These notifications must go to your Gmail account that holds the script and spreadsheet
-2. 
+## Simpler Setup
+1. This is the most tedious. You have to go into your account for all the financial instituions you care about (eg, your credit card, your bank, your peer to peer payments account), go to your account settings, and turn on email notifications for any transactions that you care about. These notifications must go to your Gmail account that holds the script and spreadsheet
+2. Download [financial-transaction-mail-filters.xml](https://github.com/jeffreyfjohnson/gas-finance-tracker/blob/main/financial-transaction-mail-filters.xml) to setup the Gmail filters that will mark relevant emails with the `financial-transactions` label. These filters will also mark the emails as read and remove them from your main inbox, to avoid clogging up your email.
+    - ⚠️⚠️⚠️ these email filters require **no forwarding of any emails**. If you get filters from someone else that forward to an unknown email address, remove the filters from your account and the person from your life
+    - You can also do this (or really any) step manually if you choose. As long as an email has the `financial-transactions` label, it will be found by the script
+3. Make a copy of this [Google Sheet](https://docs.google.com/spreadsheets/d/1Ulgv1zPzWj1FWTZlDs9SJcp0W7NUl14BVisanfR8qKs/copy). You can title it whatever you want, but don't change the name of the individual sheets within the spreadsheet
+    - You will see a warning about copying an associated Google Apps Script. The script attached to this spreadsheet simply allows for easy ignoring of transactions. You can inspect it for safety, or immediately delete it if you wish. It is not necessary for the core functionality
+5. Copy the spreadsheet ID from the URL. This is the long string of random letters and numbers in between `d/` and `/copy` or `/edit` in the top bar of your browser. For instance, the ID of the spreadsheet you just copied is `1Ulgv1zPzWj1FWTZlDs9SJcp0W7NUl14BVisanfR8qKs`. Make sure you omit the slashes. Paste this somewhere you can access it later.
+    - If you want, you can add some categories you might want to categorize transactions as. You can add them in the `D` column of the `overview` sheet. `Groceries` and `Misc` are examples that I have added, but you don't need them
+6. Go to the [latest release](https://github.com/jeffreyfjohnson/gas-finance-tracker/releases/latest) for this repo, and download `combined.js` to your computer
+7. Go to [https://script.google.com/home](https://script.google.com/home), and create a new project
+8. Delete all the contents of the `Code.js` file, and paste **everything** from the `combined.js` file you just downloaded.
+9. In the top bar of the Google Apps Script console, next to run and debug, select `getTransactionsForDay`, then press run
+10. You will see a permission dialog. Click review permissions.
+11. You will see a scary looking warning  
+    <img width="644" alt="image" src="https://github.com/user-attachments/assets/1bf29ad7-434a-4567-a59e-a2cb5895cddd" />
+12. ⚠️⚠️⚠️ If the email is not your email **stop immediately, and delete the GAS project. MAKE SURE THE EMAIL IS EXACTLY YOUR EMAIL WITH NO DEVIATIONS** 
+13. If the email is your email, you have nothing to worry about. You are giving yourself access to all your data. That is fine. Click "Advanced", and then the "Continue to Untitled/whatever you named your project (unsafe)" link
+14. Grant all the permissions, and then continue
+15. You're almost there, but you will see an error at this point. To fix it, go to `Project Settings` in the left sidebar, scroll down, and add 2 script properties
+    - property: `myEmail`, value: your actual email
+    - property: `spreadsheetId`, value: the spreadsheet ID you remembered to copy and paste to a safe place earlier. If you forgot, don't worry, just go back to your copy of the spreadsheet and grab it from the URL  
+      <img width="817" alt="image" src="https://github.com/user-attachments/assets/06f9707c-b3e6-48bf-8510-85653624f200" />
+
+16. Save the properties, go back to the `Editor` via the left pane, click `Run` once again, and if you don't see any errors, you've done the hard part!
+17. You can now set this up to run automatically. Go to the `Triggers` page from the left pane, click `Add Trigger`, and then select `getTransactionsForDay` as the function to run. You can elect to have it run every minute (completely excessive), hour (pretty reasonable), day, etc. Save this, and your financial transactions should start rolling in automatically!
+
+## Customizations
+- Add more categories to the `overview` sheet of the spreadsheet. These will propogate a few places throughout the spreadsheet
+- Speaking of categories, in the `categories` sheet, you can define default categories if the transaction description contains a certain string
+  - for instance if you mapped `safeway` to the `Groceries` category, and a transaction came in with description `SAFEWAYGROCERY #4321`, that transaction will automatically be categorized as `Groceries`
+- In the `rules` sheet, you can get more advanced with your customization. For any of the first 3 columns aka the "if" columns, you can put what strings need to be present in the email, description or extra data, in order for the following modifications to apply
+  - if any of the first 3 columns are empty, they are ignored for that rule
+  - email is self explanatory, use one of the following:
+    - `venmo`
+    - `chase`
+    - `usbank`
+    - `bankofamerica`
+    - `capitalone`
+  - description just checks the transaction description
+  - extra data checks data that the script provides which is not visible from the spreadsheet itself. The only place it is used right now, is for Chase credit card transactions, where extra data is the last 4 of the card number
+  - Then you can choose an action (`Spending`, `Income`, `Ignored`), which will post the transaction matching the criteria to the corresponding sheet. This must always be present for a rule
+  - You can also add a multiplier for the amount or shared amount
+  - If the action is `Ignored`, feel free to add a specific reason why you want to ignore that in the next column
+  - So for example, if I want to halve the amount Netflix transactions on my Chase card ending in 2211, the rule row would look like this
+  - | if email contains |	if description contains |	if extra data contains |	then |	apply multiplier to amount |	apply multiplier to shared amount |	ignore reason |
+    |-------------------|--------------------------|------------------------|------|-----------------------------|------------------------------------|---------------|
+    |    chase          |     netflix              |     2211               | Spending |        0.5                     |                                    |               |
+
+## Advanced setup
+Assuming you have some experience creating software, or are just darned persistent, it should be easy to see how you can adapt the setup instructions above if you want a little more control. If that's the case [clasp](https://github.com/google/clasp) makes it much easier to interact with a local repo via the command line
+
 
