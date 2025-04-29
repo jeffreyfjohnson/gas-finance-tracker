@@ -39,7 +39,6 @@ function parsePaystub(pdfString, emailId) {
     total,
     "ukg",
     emailId,
-    logInsteadOfWrite,
   )
 }
 
