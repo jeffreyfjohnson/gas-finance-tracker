@@ -1,13 +1,17 @@
 var loadedRules = null
 
 function applyRuleAndWriteRow(email, date, description, extraData, amt, src, emailId) {
+  console.log(description)
+  console.log(extraData)
   let rules = getSheetRules()
   
   for (let rule of rules) {
     // if the rule written in the spreadsheet has an email, and the email doesn't match it, then move past this rule
     if (rule.email && !email.toLowerCase().includes(rule.email)) continue
     if (rule.desc && !description.toLowerCase().includes(rule.desc)) continue
-    if (extraData && (rule.extraData && !extraData.toLowerCase().includes(rule.extraData))) continue
+    // if the transaction doesn't have extraData, we can't match the current rule at this point, so skip
+    if (!extraData) continue
+    if (rule.extraData && !extraData.toLowerCase().includes(rule.extraData)) continue
 
     console.log(rule)
 
