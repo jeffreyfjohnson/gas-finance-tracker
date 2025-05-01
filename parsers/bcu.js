@@ -15,7 +15,7 @@ function parseChecking(messageBody, emailId) {
   }
 
   let amountRegex = /\$(\d{0,3}\,?\d{0,3}\.\d{2})/
-  let descriptionRegex = /(Deposit Dividend|Withdrawal|Draft|Deposit) (ACH|POS)?(.*)/
+  let descriptionRegex = /(Deposit Dividend|Withdrawal|Draft|Deposit|ATM) (ACH|POS)?(.*)/
   let today = formatToday()
 
   for (let transaction of allTransactions) {

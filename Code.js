@@ -8,7 +8,8 @@ const authorToParseFunc = {
 };
 
 function getTransactionsForDay() {
-
+  const sendEmailOnError = props.getProperty("sendEmailOnError") === "true"
+  let myEmail = props.getProperty("myEmail")
   try {
     let gmailQuery = `label:${gmailLabel} newer_than:${daysBack}d older_than:0d`;
     let threads = GmailApp.search(gmailQuery);
@@ -38,7 +39,6 @@ function getTransactionsForDay() {
         }
 
         let email = stripEmail(message.getFrom())
-        let myEmail = props.getProperty("myEmail")
 
         if (email == myEmail && message.getSubject().toLowerCase().includes("ukg")) {
           let attachment = message.getAttachments()[0]
@@ -47,14 +47,26 @@ function getTransactionsForDay() {
           console.log(email)
           let parseFunc = authorToParseFunc[email]
           if (!parseFunc) continue;
-          authorToParseFunc[email](message.getPlainBody(), id)
+          let messageBody = message.getPlainBody()
+          try {
+            authorToParseFunc[email](messageBody, id)
+          } catch (err) {
+            console.log(err.stack)
+            if (sendEmailOnError) {
+              GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Parse Error", err.stack)
+            }
+            writeErrorRowsToAllSheets(messageBody, err)
+          }
         }
       }
     } 
 
     if(!ignoreForDebug) timestampCell.setValue(newMaxTimestamp)
   } catch (err) {
-    console.log(err)
+    console.log(err.stack)
+    if (sendEmailOnError) {
+      GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Error", err.stack)
+    }
   }
 }
 
@@ -62,4 +74,12 @@ function stripEmail(pretty) {
   if (!pretty.includes('<')) return pretty
   let emailRegex = /<(.*)>/;
   return pretty.match(emailRegex)[1]
+}
+
+function writeErrorRowsToAllSheets(message, err) {
+  const delimiter = "xxxxxxxxxxxxxx"
+  const messageTxt = `Error parsing message: ${message}`
+  const row = [delimiter, messageTxt, err.stack]
+  incomeSheet.appendRow(row),
+  transactionSheet.appendRow(row)
 }
