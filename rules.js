@@ -1,8 +1,8 @@
 var loadedRules = null
 
 function applyRuleAndWriteRow(email, date, description, extraData, amt, src, emailId) {
-  console.log(description)
-  console.log(extraData)
+  // console.log(description)
+  // console.log(extraData)
   let rules = getSheetRules()
   
   for (let rule of rules) {
@@ -15,35 +15,40 @@ function applyRuleAndWriteRow(email, date, description, extraData, amt, src, ema
 
     console.log(rule)
 
+    let finalDescription = (rule.prependDescription ?? "") + description
+
     switch (rule.action) {
       case "ignored":
         writeIgnoredRow(
           date,
-          description,
+          finalDescription,
           amt,
           rule.ignoreReason,
           src,
           emailId,
+          rule.tags,
         )
         return
       case "income":
         writeIncomeRow(
           date,
-          description,
+          finalDescription,
           amt,
           src,
           email,
+          rule.tags,
         )
         return
       default: 
         writeExpenseRow(
           date,
-          description,
+          finalDescription,
           amt * (rule.multiplier ?? 1.0),
           amt * (rule.sharedMultiplier ?? 1.0),
           categorize(description),
           src,
           emailId,
+          rule.tags,
         ) 
         return
     }
@@ -75,6 +80,8 @@ function getSheetRules() {
       let rawSharedMultiplier = parseFloat(rulesSheet.getRange(i, 6).getValue())
       let sharedMultiplier = isNaN(rawSharedMultiplier) ? null : rawSharedMultiplier
       let ignoreReason = rulesSheet.getRange(i, 7).getValue().toString().toLowerCase()
+      let prependDescription = rulesSheet.getRange(i, 8).getValue().toString().toLowerCase()
+      let tags = rulesSheet.getRange(i, 9).getValue().toString().toLowerCase()
       rules.push(
         { 
           email : email, 
@@ -83,7 +90,9 @@ function getSheetRules() {
           action : action, 
           multiplier : multiplier, 
           sharedMultiplier : sharedMultiplier,
-          ignoreReason : ignoreReason
+          ignoreReason : ignoreReason,
+          prependDescription: prependDescription,
+          tags: tags,
         }
       )
     }
@@ -95,35 +104,34 @@ function getSheetRules() {
   
 }
 
-function writeExpenseRow(date, description, amt, sharedAmount, category, src, emailId) {
+function writeExpenseRow(date, description, amt, sharedAmount, category, src, emailId, tags) {
   if (ignoreForDebug) {
     console.log(`Write expense: ${date} | ${description} | ${amt} | ${sharedAmount} | ${category} | ${src} | ${emailId}`)
   } else {
-    transactionSheet.appendRow([date, description, amt, sharedAmount, category, src, emailId])
+    transactionSheet.appendRow([date, description, amt, sharedAmount, category, src, emailId, null, tags])
   }
   
 }
 
-function writeIncomeRow(date, description, amt, src, emailId) {
+function writeIncomeRow(date, description, amt, src, emailId, tags) {
   if (ignoreForDebug) {
     console.log(`Write income: ${date} | ${description} | ${amt} | ${src} | ${emailId}`)
   } else {
-    incomeSheet.appendRow([date, description, amt, src, emailId]);
+    incomeSheet.appendRow([date, description, amt, src, emailId, null, tags]);
   }
 }
 
-function writeIgnoredRow(date, description, amt, reason, src, emailId) {
+function writeIgnoredRow(date, description, amt, reason, src, emailId, tags) {
   if (ignoreForDebug) {
     console.log(`Write ignored: ${date} | ${description} | ${amt} | ${reason} | ${src} | ${emailId}`)
   } else {
-    ignoredSheet.appendRow([date, description, amt, reason, src, emailId]);
+    ignoredSheet.appendRow([date, description, amt, reason, src, emailId, null, tags]);
   }
 }
 
 function testRule() {
-  console.log(
     applyRuleAndWriteRow(
-      "venmo",
+      "chase",
       "test date",
       "credit card bill",
       "9876",
@@ -131,5 +139,4 @@ function testRule() {
       "test source",
       "email id"
     )
-  )
 }
