@@ -9,9 +9,10 @@ function applyRuleAndWriteRow(email, date, description, extraData, amt, src, ema
     // if the rule written in the spreadsheet has an email, and the email doesn't match it, then move past this rule
     if (rule.email && !email.toLowerCase().includes(rule.email)) continue
     if (rule.desc && !description.toLowerCase().includes(rule.desc)) continue
-    // if the transaction doesn't have extraData, we can't match the current rule at this point, so skip
-    if (!extraData) continue
-    if (rule.extraData && !extraData.toLowerCase().includes(rule.extraData)) continue
+    // if the transaction and rule have extra data, and they don't match, move past this rule
+    if (extraData && (rule.extraData && !extraData.toLowerCase().includes(rule.extraData))) continue
+    // additionally, if the transaction does not have extra data, but the rule does, they cannot match, so move past this rule
+    if (!extraData && rule.extraData) continue
 
     console.log(rule)
 
