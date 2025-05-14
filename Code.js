@@ -8,7 +8,6 @@ const authorToParseFunc = {
 };
 
 function getTransactionsForDay() {
-  const sendEmailOnError = props.getProperty("sendEmailOnError") === "true"
   let myEmail = props.getProperty("myEmail")
   try {
     let gmailQuery = `label:${gmailLabel} newer_than:${daysBack}d older_than:0d`;

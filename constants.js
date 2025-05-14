@@ -12,4 +12,6 @@ const daysBack = 2
 
 const ignoreForDebug = false
 
+const sendEmailOnError = true
+
 const gmailLabel = "financial-transactions"
