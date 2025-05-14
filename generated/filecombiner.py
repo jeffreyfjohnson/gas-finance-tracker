@@ -2,7 +2,7 @@ import os
 
 def combine_js_files(source_directory, output_file):
     exclude_dirs = {'generated', '.git'}
-    exclude_files = {'.gitignore', 'testStrings.js', '.clasp.json' }
+    exclude_files = {'.gitignore', 'testStrings.js', '.clasp.json', 'setup.js'}
     
     with open(output_file, 'w', encoding='utf-8') as outfile:
         for root, dirs, files in os.walk(source_directory):
