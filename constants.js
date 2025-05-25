@@ -6,6 +6,7 @@ let ignoredSheet = spreadsheet.getSheetByName("ignored");
 let categorySheet = spreadsheet.getSheetByName("categories");
 let rulesSheet = spreadsheet.getSheetByName("rules");
 let metadataSheet = spreadsheet.getSheetByName("metadata");
+let sankeySheet = spreadsheet.getSheetByName("sankey")
 let timestampCell = metadataSheet.getRange("A2")
 
 const daysBack = 2
