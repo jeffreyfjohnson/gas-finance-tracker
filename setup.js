@@ -5,7 +5,7 @@ function _setup() {
   }
   
   const filtersToCreate = [
-    {email: "no.reply.alerts@chase.com", subject: "transaction"},
+    {email: "no.reply.alerts@chase.com", subject: "transaction OR sent OR deposit"},
     {email: "venmo@venmo.com", subject: "paid"},
     {email: "no-reply@mail.safe.bcu.org", subject: "alert"},
     {email: "capitalone@notification.capitalone.com", subject: "transaction OR reward"},
