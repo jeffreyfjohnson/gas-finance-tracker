@@ -18,7 +18,7 @@ function createSankey() {
 
   let spendingCategories = getSpendingParentCategories()
 
-  let sankeyInputText = createSankeyInputText(incomeSum, spendingSum, incomeBlock, spendingBlock, spendingCategories, true)
+  let sankeyInputText = createSankeyInputText(incomeSum, spendingSum, incomeBlock, spendingBlock, spendingCategories, false)
 
   console.log(sankeyInputText)
 }
@@ -107,7 +107,6 @@ function createSankeyInputText(
     divisor = totalIncome/100
   }
 
-  console.log(divisor)
   let sb = []
   for (const [category, amount] of incomeBlock) {
     sb.push(`${category} [${(amount/divisor).toFixed(2)}] Income`)

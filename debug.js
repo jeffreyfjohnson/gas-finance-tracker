@@ -16,3 +16,7 @@ function getEmails() {
       }
   }
 }
+
+function getCellValue() {
+  console.log(transactionSheet.getRange("C474").getValue().toString())
+}

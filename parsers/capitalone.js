@@ -1,6 +1,6 @@
 function parseCapitalOne(messageBody, emailId) {
   let amountRegex = /amount of \$(\d{0,3}\,?\d{0,3}\.\d{2})/; 
-  let dateRegex = /on (.*\d{2}\, \d{4}), at/;
+  let dateRegex = /on (.*\d{1,2}\, \d{4}), at/;
   let descriptionRegex = /, at (.*)\,/;
 
   let amountMatches = messageBody.match(amountRegex);
