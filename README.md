@@ -23,6 +23,7 @@
 
 ## Currently Supported Institutions
 - Chase credit cards
+- Chase bank accounts (deposits have no description, unfortunately Chase does not provide this info in their email notifications. You can update these manually)
 - US Bank credit cards
 - Bank of America credit cards
 - Capital One credit cards
