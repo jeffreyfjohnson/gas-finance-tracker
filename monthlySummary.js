@@ -23,8 +23,27 @@ function sendMonthlySummary() {
   spreadsheet.deleteSheet(overviewSheet)
 }
 
+/**
+ * People may not use all category rows, so don't show unpopulated ones in the email summary
+ */
+function getLastPopulatedCategoryRowIndex(overviewSheet) {
+  let range = overviewSheet.getRange("D5:D100").getValues()
+  let row = -1
+
+  for (let i = 0; i < range.length; i++) {
+    const value = String(range[i][0]).toLowerCase()
+
+    if (value === '' || value === 'total') {
+      row = i + 5 - 1 // start on row 5, 1 based for sheet rows take off one to get back to a populated row
+      return row
+    }
+  }
+
+  return 28 // default for template
+}
+
 function createEmailHtml(subject, overviewSheet) {
-  let categoryDataRange = overviewSheet.getRange("D5:G23")
+  let categoryDataRange = overviewSheet.getRange(`D5:G${getLastPopulatedCategoryRowIndex(overviewSheet)}`)
   const displayValues = categoryDataRange.getDisplayValues()
   const backgrounds = categoryDataRange.getBackgrounds()
   let categoryChartHtml = ""
