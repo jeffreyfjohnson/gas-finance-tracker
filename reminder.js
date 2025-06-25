@@ -1,4 +1,10 @@
 function remind() {
+  let emailText = getIncompleteRowText()
+
+  if (emailText) sendReminderEmail(noCategoryRows, noIncomeDescRows)
+}
+
+function getIncompleteRowText() {
   let lastTransactionRow = transactionSheet.getLastRow()
   let noCategoryRows = []
   for (let i = 1; i <= lastTransactionRow; i++) {
@@ -17,13 +23,8 @@ function remind() {
     }
   }
 
-  if (noCategoryRows.length > 0 || noIncomeDescRows.length > 0) {
-    sendReminderEmail(noCategoryRows, noIncomeDescRows)
-  }
-  
-}
+  if (noCategoryRows.length <= 0 && noIncomeDescRows.length <= 0) return null
 
-function sendReminderEmail(noCategoryRows, noIncomeDescRows) {
   let emailText = `
   You have ${noCategoryRows.length} expenses without categories, and ${noIncomeDescRows.length} income rows without descriptions.
 
@@ -37,7 +38,11 @@ function sendReminderEmail(noCategoryRows, noIncomeDescRows) {
 
   ${spreadsheet.getUrl()}
   `
-  
+
+  return emailText
+}
+
+function sendReminderEmail(text) {
   const myEmail = props.getProperty("myEmail")
-  GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Needs Attention", emailText)
+  GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Needs Attention", text)
 }
