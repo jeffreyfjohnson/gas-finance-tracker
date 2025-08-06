@@ -1,9 +1,9 @@
 var loadedRules = null
 
 function applyRuleAndWriteRow(email, date, description, extraData, amt, src, emailId) {
-  // console.log(description)
-  // console.log(extraData)
-  // console.log(email)
+  console.log(description)
+  console.log(extraData)
+  console.log(email)
   let rules = getSheetRules()
   
   for (let rule of rules) {

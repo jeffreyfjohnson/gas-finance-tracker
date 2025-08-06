@@ -10,6 +10,8 @@ function parseChase(messageBody, emailId) {
     parseChaseBankDeposit(messageBody, emailId)
   } else if (body.includes("check deposit")) {
     parseChaseCheck(messageBody, emailId)
+  } else if (body.includes("ATM deposit")) {
+    parseChaseAtmDeposit(messageBody, emailId)
   }
 }
 
@@ -75,6 +77,26 @@ function parseChaseBankDeposit(messageBody, emailId) {
     "deposit",
     fullAmt,
     "Chase bank funds deposit",
+    emailId,
+  )
+}
+
+function parseChaseAtmDeposit(messageBody, emailId) {
+  let dateRegex = /Posted on (.*)/;
+  let atmAmountRegex = /Deposit amount \$(.*)/;
+
+  let amountMatches = messageBody.match(atmAmountRegex);
+  let dateMatches = messageBody.match(dateRegex)
+
+  let fullAmt = parseFloat(amountMatches[1].replace(/,/g, ''))
+  
+  applyRuleAndWriteRow(
+    "chase",
+    formatDate(dateMatches[1]),
+    "Chase ATM deposit",
+    "ATM deposit",
+    fullAmt,
+    "Chase bank ATM deposit",
     emailId,
   )
 }

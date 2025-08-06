@@ -1,15 +1,16 @@
 function createSankey() {
   let startDate = new Date(sankeySheet.getRange(1,2).getValue().toString())
+  let endDate = new Date(sankeySheet.getRange(1,4).getValue().toString())
   let incomeLabels = getIncomeLabels()
 
-  let incomeBlock = aggregateIncomeLabels(startDate, incomeLabels)
+  let incomeBlock = aggregateIncomeLabels(startDate, endDate, incomeLabels)
 
   let incomeSum = 0
   for (const income of incomeBlock.values()) {
     incomeSum += income
   }
 
-  let spendingBlock = aggregateSpending(startDate)
+  let spendingBlock = aggregateSpending(startDate, endDate)
 
   let spendingSum = 0
   for (const spending of spendingBlock.values()) {
@@ -49,7 +50,7 @@ function getSpendingParentCategories() {
   return categories
 }
 
-function aggregateIncomeLabels(startDate, incomeLabels) {
+function aggregateIncomeLabels(startDate, endDate, incomeLabels) {
   let lastRow = incomeSheet.getLastRow()
 
   let incomeBlock = new Map(
@@ -59,7 +60,7 @@ function aggregateIncomeLabels(startDate, incomeLabels) {
   outerloop:
   for (let i = 2; i <= lastRow; i++) {
     let date = new Date(incomeSheet.getRange(i, 1).getValue().toString())
-    if (date < startDate) continue
+    if (date < startDate || date > endDate) continue
 
     let amount = parseFloat(incomeSheet.getRange(i, 3).getValue().toString())
     let tags = incomeSheet.getRange(i, 7).getValue().toString()
@@ -75,14 +76,14 @@ function aggregateIncomeLabels(startDate, incomeLabels) {
   return incomeBlock
 }
 
-function aggregateSpending(startDate) {
+function aggregateSpending(startDate, endDate) {
   let lastRow = transactionSheet.getLastRow()
 
   let spendingBlock = new Map()
 
   for (let i = 2; i <= lastRow; i++) {
     let date = new Date(transactionSheet.getRange(i, 1).getValue().toString())
-    if (date < startDate) continue
+    if (date < startDate || date > endDate) continue
 
     let amount = parseFloat(transactionSheet.getRange(i, 3).getValue().toString())
     let category = transactionSheet.getRange(i, 5).getValue().toString()

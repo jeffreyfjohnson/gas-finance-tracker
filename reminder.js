@@ -1,7 +1,7 @@
 function remind() {
   let emailText = getIncompleteRowText()
 
-  if (emailText) sendReminderEmail(noCategoryRows, noIncomeDescRows)
+  if (emailText) sendReminderEmail(emailText)
 }
 
 function getIncompleteRowText() {
