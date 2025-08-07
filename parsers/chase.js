@@ -6,12 +6,12 @@ function parseChase(messageBody, emailId) {
     parseChaseCC(messageBody, emailId)
   } else if (body.includes("transfer alert")) {
     parseChaseBankSent(messageBody, emailId)
+  } else if (body.includes("atm deposit")) {
+    parseChaseAtmDeposit(messageBody, emailId)
   } else if (body.includes("deposit posted")) {
     parseChaseBankDeposit(messageBody, emailId)
   } else if (body.includes("check deposit")) {
     parseChaseCheck(messageBody, emailId)
-  } else if (body.includes("ATM deposit")) {
-    parseChaseAtmDeposit(messageBody, emailId)
   }
 }
 
