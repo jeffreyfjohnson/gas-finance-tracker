@@ -9,6 +9,11 @@ const authorToParseFunc = {
 
 function getTransactionsForDay() {
   let myEmail = props.getProperty("myEmail")
+
+  if (typeof getPrivateParsers === "function") {
+    Object.assign(authorToParseFunc, getPrivateParsers());
+  }
+
   try {
     let gmailQuery = `label:${gmailLabel} newer_than:${daysBack}d older_than:0d`;
     let threads = GmailApp.search(gmailQuery);
@@ -39,23 +44,25 @@ function getTransactionsForDay() {
 
         let email = stripEmail(message.getFrom())
 
-        if (email == myEmail && message.getSubject().toLowerCase().includes("ukg")) {
+        console.log(email)
+        let parseFunc = authorToParseFunc[email]
+        if (!parseFunc) continue;
+        let plainBody = message.getPlainBody().trim()
+        let messageBody
+        if (plainBody == null || plainBody === "") {
           let attachment = message.getAttachments()[0]
-          parsePaystub(convertPDFToText(attachment.getName(), attachment), id)
+          messageBody = convertPDFToText(attachment.getName(), attachment)
         } else {
-          console.log(email)
-          let parseFunc = authorToParseFunc[email]
-          if (!parseFunc) continue;
-          let messageBody = message.getPlainBody()
-          try {
-            authorToParseFunc[email](messageBody, id)
-          } catch (err) {
-            console.log(err.stack)
-            if (sendEmailOnError) {
-              GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Parse Error", err.stack)
-            }
-            writeErrorRowsToAllSheets(messageBody, err)
+          messageBody = plainBody
+        }
+        try {
+          authorToParseFunc[email](messageBody, id)
+        } catch (err) {
+          console.log(err.stack)
+          if (sendEmailOnError) {
+            GmailApp.sendEmail(myEmail, "Expense Tracking Sheet Parse Error", err.stack)
           }
+          writeErrorRowsToAllSheets(messageBody, err)
         }
       }
     } 
