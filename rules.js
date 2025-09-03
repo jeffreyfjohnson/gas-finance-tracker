@@ -17,7 +17,7 @@ function applyRuleAndWriteRow(email, date, description, extraData, amt, src, ema
 
     console.log(rule)
 
-    let finalDescription = (rule.prependDescription ?? "") + description
+    let finalDescription = (rule.prependDescription ?? "") + " " + description
 
     switch (rule.action) {
       case "ignored":
@@ -47,7 +47,7 @@ function applyRuleAndWriteRow(email, date, description, extraData, amt, src, ema
           finalDescription,
           amt * (rule.multiplier ?? 1.0),
           amt * (rule.sharedMultiplier ?? 1.0),
-          categorize(description),
+          categorize(finalDescription),
           src,
           emailId,
           rule.tags,
@@ -82,7 +82,7 @@ function getSheetRules() {
       let rawSharedMultiplier = parseFloat(rulesSheet.getRange(i, 6).getValue())
       let sharedMultiplier = isNaN(rawSharedMultiplier) ? null : rawSharedMultiplier
       let ignoreReason = rulesSheet.getRange(i, 7).getValue().toString().toLowerCase()
-      let prependDescription = rulesSheet.getRange(i, 8).getValue().toString().toLowerCase()
+      let prependDescription = rulesSheet.getRange(i, 8).getValue().toString()
       let tags = rulesSheet.getRange(i, 9).getValue().toString().toLowerCase()
       rules.push(
         { 
